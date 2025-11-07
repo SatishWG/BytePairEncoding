@@ -1,0 +1,13 @@
+[project]
+name = "assignment"
+version = "0.1.0"
+description = "Byte Pair Encoding"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "numpy",
+    "pandas",
+    "datasets",
+    "torch",
+    "numpy"
+]
