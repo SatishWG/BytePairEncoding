@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1HqEe7ZpnDUMkC3c1kfFiSHNiUzQZnUXp
 """
 
-import ipykernel
+# import ipykernel
 import sys
 import os
 import numpy as np
@@ -15,7 +15,7 @@ import pandas as pd
 import datasets
 import torch
 import re
-import tiktoken
+# import tiktoken
 
 # Load the Hindi Wikipedia dataset
 from datasets import load_dataset
@@ -301,24 +301,24 @@ print(decode(encode(text0)))
 text2 = decode(encode(text0))
 print(text2 == text0)
 
-"""[Tiktoken](https://tiktokenizer.vercel.app/?model=o200k_base) and GPT4 [Regex](https://github.com/openai/tiktoken/blob/main/tiktoken_ext/openai_public.py)
+# After training (when merges dictionary is available):
+import json
 
-# [Extending tiktoken](https://github.com/openai/tiktoken)
-"""
+# Convert merges dictionary to JSON format
+merges_json = {f"{k[0]},{k[1]}": v for k, v in merges.items()}
 
-cl100k_base = tiktoken.get_encoding("cl100k_base")
+data = {
+    "merges": merges_json,
+    "vocab_size": 5000,
+    "num_merges": len(merges),
+    "description": "BPE merges trained on Hindi Wikipedia dataset (1000 articles)"
+}
 
-# In production, load the arguments directly instead of accessing private attributes
-# See openai_public.py for examples of arguments for specific encodings
-enc = tiktoken.Encoding(
-    # If you're changing the set of special tokens, make sure to use a different name
-    # It should be clear from the name what behaviour to expect.
-    name="cl100k_im",
-    pat_str=cl100k_base._pat_str,
-    mergeable_ranks=cl100k_base._mergeable_ranks,
-    special_tokens={
-        **cl100k_base._special_tokens,
-        "<|im_start|>": 100264,
-        "<|im_end|>": 100265,
-    }
-)
+# Save to file
+with open("merges.json", 'w', encoding='utf-8') as f:
+    json.dump(data, f, indent=2)
+
+print(f"✅ Saved {len(merges)} merges to merges.json")
+print(f"   Vocabulary size: 5000")
+print(f"   Number of merges: {len(merges)}")
+
